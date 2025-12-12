@@ -4,11 +4,44 @@ public class PuzzleActivator : MonoBehaviour
 {
     public PuzzleBoard board;
 
-    void OnTriggerStay(Collider other)
+    private bool playerInTrigger = false;
+
+    void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E)) // например, кнопка E
+        if (other.CompareTag("Player"))
         {
-            board.ActivatePuzzle();
+            playerInTrigger = true;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInTrigger = false;
+            if (board.IsActive)
+            {
+                board.DeactivatePuzzle();
+            }
+        }
+    }
+
+    void Update()
+    {
+        if (!playerInTrigger) return;
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (!board.IsActive)
+            {
+                board.ActivatePuzzle();
+                board.Shuffle(); //Это метод из пазлборда
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && board.IsActive)
+        {
+            board.DeactivatePuzzle();
         }
     }
 }
