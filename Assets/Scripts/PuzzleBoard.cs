@@ -46,7 +46,7 @@ public class PuzzleBoard : MonoBehaviour
         tiles[emptyCell.x, emptyCell.y] = null;
         cellCenters[emptyCell.x, emptyCell.y] = CalculateEmptyCellCenter();
 
-       //Нумерация этой пебени
+       //Нумерация
         int num = 1;
         for (int r = 0; r < rows; r++)
             for (int c = 0; c < cols; c++)
@@ -56,7 +56,7 @@ public class PuzzleBoard : MonoBehaviour
 
     void Update()
     {
-        if (!IsActive) return; // Если пазл не активен — нахуй обновления
+        if (!IsActive) return; // Если пазл не активен — нет обновления
         if (Input.GetKeyDown(KeyCode.Escape))
             DeactivatePuzzle();
     }
@@ -65,13 +65,13 @@ public class PuzzleBoard : MonoBehaviour
     {
         var children = puzzleRoot.GetComponentsInChildren<Tile>(true);
         List<Tile> activeTiles = new List<Tile>();
-        // Фильтруем только активные — выключенные нахуй не нужны
+        // Фильтруем только активные — выключенные не нужны
         foreach (var tile in children)
             if (tile.gameObject.activeInHierarchy)
             {
                 activeTiles.Add(tile);
             }
-        // Проверяем: должно быть РОВНО 8 тайлов, иначе пиздец
+        // Проверяем: должно быть РОВНО 8 тайлов, иначе гг
         if (activeTiles.Count != 8)
         {
             Debug.LogError($"Должно быть 8 тайлов, найдено: {activeTiles.Count}");
@@ -175,7 +175,7 @@ public class PuzzleBoard : MonoBehaviour
         IsActive = false;
     }
 
-    // Эта поебень чтобы пятнашки каждый раз при вхоже перемешивались
+    // Это чтобы пятнашки каждый раз при входе перемешивались
     public void Shuffle()
     {
         System.Random rng = new System.Random();
