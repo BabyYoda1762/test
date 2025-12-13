@@ -9,7 +9,6 @@
 
 # Library: ignore all except PackageCache (needed for consistent packages)
 /[Ll]ibrary/*
-!/Library/PackageCache/
 
 # Ensure packages are tracked
 !/Packages/
