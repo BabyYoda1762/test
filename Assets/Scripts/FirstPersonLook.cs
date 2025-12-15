@@ -10,6 +10,8 @@ public class FirstPersonLook : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        sensitivity = PlayerPrefs.GetFloat("Sensitivity", 2f);
+        GetComponent<Camera>().fieldOfView = PlayerPrefs.GetFloat("FOV", 60f);
     }
 
     void Update()

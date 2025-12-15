@@ -57,8 +57,6 @@ public class PuzzleBoard : MonoBehaviour
     void Update()
     {
         if (!IsActive) return; // Если пазл не активен — нет обновления
-        if (Input.GetKeyDown(KeyCode.Escape))
-            DeactivatePuzzle();
     }
 
     private void CacheTilesFromHierarchy()
