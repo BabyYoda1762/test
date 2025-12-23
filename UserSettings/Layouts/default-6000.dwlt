@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1918
     height: 980
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneView
+  m_Name: GameView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -220,13 +220,13 @@ MonoBehaviour:
     height: 591
   m_MinSize: {x: 202, y: 226}
   m_MaxSize: {x: 4002, y: 4026}
-  m_ActualView: {fileID: 16}
+  m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 16}
   - {fileID: 14}
   - {fileID: 12}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1321,7 +1321,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0.00058142625, y: 0.99703455, z: -0.0074780453, w: 0.07671894}
     speed: 2
-    m_Value: {x: 0.00059263676, y: 0.9969084, z: -0.0074770898, w: 0.078213625}
+    m_Value: {x: 0.00058142043, y: 0.99702454, z: -0.0074779703, w: 0.076718174}
   m_Size:
     m_Target: 2.364484
     speed: 2
