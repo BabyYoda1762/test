@@ -23,7 +23,7 @@ public class ShootingRangeManager : MonoBehaviour
     [Header("Game Settings")]
     public float popDelayMax = 1.5f;
     public int maxTargets = 6;
-    public float targetStayTime = 2f; // Бля, это сколько мишень торчит сверху, потом сама спиздует
+    public float targetStayTime = 2f; //это сколько мишень торчит сверху, потом сама уйдет
 
     private int score = 0;
     private int ammoLeft = 6;
@@ -70,21 +70,21 @@ public class ShootingRangeManager : MonoBehaviour
         scoreCanvas.gameObject.SetActive(true);
         UpdateUI();
 
-        // Опускаем тебя(шучу мешени)
+        // Опускаем мишени
         foreach (var target in targets)
         {
             if (target != null)
                 target.ResetTarget();
         }
 
-        // Запуск мишений
+        // Запуск мишеней
         if (targetCycleCoroutine != null)
             StopCoroutine(targetCycleCoroutine);
 
         targetCycleCoroutine = StartCoroutine(TargetCycle());
     }
 
-    // Это корутина которая поднимает мишени по очереди
+    // Это темка которая поднимает мишени по очереди
     private IEnumerator TargetCycle()
     {
         // Список доступных мишеней которые еще не выскакивали в этом цикле
@@ -116,7 +116,7 @@ public class ShootingRangeManager : MonoBehaviour
                 // Ждем пока мишень постоит, если не сбили - сама уедет
                 yield return new WaitForSeconds(targetStayTime);
 
-                // Если еще не сбили - опускаем нахуй
+                // Если еще не сбили - опускаем 
                 if (target.IsUp)
                 {
                     target.Hit(false); // false - не засчитываем как попадание
@@ -167,7 +167,7 @@ public class ShootingRangeManager : MonoBehaviour
         shooter.FindBullets();
     }
 
-    // Эту хуйню вызывает мишень когда в нее попадают
+    // Эту тему вызывает мишень когда в нее попадают
     public void OnTargetHit()
     {
         if (!IsActive) return;
@@ -175,12 +175,12 @@ public class ShootingRangeManager : MonoBehaviour
         score++;
         UpdateUI();
 
-        // Если все мишени повалил = победа тока нахуй хуй пайми почему можно уложить тока 5 это либо из-за того что первая мишень target а все остальные target(1)... target(5) ну или я еблан
+        // Если все мишени повалил = победа тока хз почему можно уложить тока 5 это либо из-за того что первая мишень target а все остальные target(1)... target(5)
         if (score >= maxTargets)
             EndGame();
     }
 
-    // Обновляем UI чтобы даун видел сколько попаданий и патронов
+    // Обновляем UI чтобы чел видел сколько попаданий и патронов
     private void UpdateUI()
     {
         scoreText.text = $"Hits: {score}/{maxTargets}";
@@ -223,7 +223,7 @@ public class ShootingRangeManager : MonoBehaviour
         revolverPicked = false;
     }
 
-    // Конец игры, все, пиздец
+    // Конец игры
     private void EndGame()
     {
         IsActive = false;
@@ -282,7 +282,7 @@ public class ShootingRangeManager : MonoBehaviour
         Destroy(bubble);
     }
 
-    // Выключение нужно сделать на кнопку, крч сам сделаешь не маленький
+    // Выключение канваса нужно сделать на кнопку, крч сам сделаешь не маленький
     public void DeactivateShooting()
     {
         IsActive = false;
