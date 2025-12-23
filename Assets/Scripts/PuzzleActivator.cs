@@ -35,12 +35,13 @@ public class PuzzleActivator : MonoBehaviour
             if (!board.IsActive)
             {
                 board.ActivatePuzzle();
-                board.Shuffle(); // запуск головоломки
+                board.Shuffle(); //Это метод из пазлборда
             }
-            else
-            {
-                board.DeactivatePuzzle(); // выход из головоломки
-            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && board.IsActive)
+        {
+            board.DeactivatePuzzle();
         }
     }
 }
