@@ -171,13 +171,10 @@ public class ShootingRangeManager : MonoBehaviour
     public void OnTargetHit()
     {
         if (!IsActive) return;
-
         score++;
         UpdateUI();
-
-        // Если все мишени повалил = победа тока хз почему можно уложить тока 5 это либо из-за того что первая мишень target а все остальные target(1)... target(5)
-        if (score >= maxTargets)
-            EndGame();
+        // Больше НЕ заканчиваем игру по количеству попаданий
+        // Игра закончится только когда кончатся патроны
     }
 
     // Обновляем UI чтобы чел видел сколько попаданий и патронов
@@ -264,7 +261,7 @@ public class ShootingRangeManager : MonoBehaviour
             text.text = msg;
         }
 
-        StartCoroutine(FadeBubble(bubble, 4f));
+        StartCoroutine(FadeBubble(bubble, 7f));
     }
 
     // Баббл плавно исчезает

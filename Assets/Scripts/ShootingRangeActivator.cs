@@ -22,7 +22,11 @@ public class ShootingRangeActivator : MonoBehaviour
     void Update()
     {
         if (!playerInZone || manager.IsActive) return;
+
         if (Input.GetKeyDown(KeyCode.E))
+        {
             manager.ActivateShooting();
+            manager.PickupRevolver();  // ÑÐÀÇÓ ןמהבטנאול נוגמכüגונ
+        }
     }
 }
