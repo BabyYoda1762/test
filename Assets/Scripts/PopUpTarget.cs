@@ -10,9 +10,8 @@ public class PopUpTarget : MonoBehaviour
     private Vector3 upPos; 
     private Vector3 downPos; 
     private bool isUp = false; 
-    private Coroutine moveCoroutine; // Чтобы можно было остановить движение
+    private Coroutine moveCoroutine;
 
-    // Свойство чтобы снаружи узнать поднята ли мишень
     public bool IsUp => isUp;
 
     void Start()
@@ -28,18 +27,16 @@ public class PopUpTarget : MonoBehaviour
         ResetTarget(); 
     }
 
-    // Вызывается чтобы поднять мишень
     public void PopUp()
     {
-        if (isUp || moveCoroutine != null) return; // Уже поднята или движется
+        if (isUp || moveCoroutine != null) return;
 
         moveCoroutine = StartCoroutine(MoveToPosition(upPos, true));
     }
 
-    // Вызывается когда в мишень попадают
     public void Hit(bool countScore = true)
     {
-        if (!isUp) return; // Если не поднята - нахуй не надо
+        if (!isUp) return;
 
         
         if (moveCoroutine != null)
@@ -53,7 +50,6 @@ public class PopUpTarget : MonoBehaviour
             manager.OnTargetHit();
     }
 
-    // Сбрасываем мишень в начальное состояние
     public void ResetTarget()
     {
         if (moveCoroutine != null)
@@ -66,7 +62,6 @@ public class PopUpTarget : MonoBehaviour
         isUp = false;
     }
 
-    // КЕбань для плавного движения мишени
     private IEnumerator MoveToPosition(Vector3 target, bool goingUp)
     {
         Vector3 start = transform.position;
@@ -77,7 +72,7 @@ public class PopUpTarget : MonoBehaviour
         {
             t += Time.deltaTime * moveSpeed;
             transform.position = Vector3.Lerp(start, target, t);
-            yield return null; // Ждем следующий кадр
+            yield return null;
         }
 
         

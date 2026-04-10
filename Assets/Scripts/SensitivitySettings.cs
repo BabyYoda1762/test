@@ -14,20 +14,13 @@ public class MenuSettings : MonoBehaviour
 
     void Start()
     {
-        if (sensitivitySlider == null || fovSlider == null)
-        {
-            Debug.LogError("Слайдеры не привязаны в MenuSettings!");
-            return;
-        }
 
-        // Загружаем сохранённые значения
         float savedSens = PlayerPrefs.GetFloat(SENS_KEY, defaultSensitivity);
         float savedFov = PlayerPrefs.GetFloat(FOV_KEY, defaultFOV);
 
         sensitivitySlider.value = savedSens;
         fovSlider.value = savedFov;
 
-        // Сразу сохраняем при изменении
         sensitivitySlider.onValueChanged.AddListener(value =>
         {
             PlayerPrefs.SetFloat(SENS_KEY, value);

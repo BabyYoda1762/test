@@ -50,19 +50,17 @@ public class FirstPersonMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // Сохраняем позицию и поворот игрока
+
             PlayerPrefs.SetFloat("PlayerPosX", transform.position.x);
             PlayerPrefs.SetFloat("PlayerPosY", transform.position.y);
             PlayerPrefs.SetFloat("PlayerPosZ", transform.position.z);
             PlayerPrefs.SetFloat("PlayerRotY", transform.eulerAngles.y);
             PlayerPrefs.Save();
 
-            // Разблокируем курсор
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
-            // Загружаем сцену главного меню
-            SceneManager.LoadScene("Main Menu"); // Замени "MainMenu" на точное имя твоей сцены меню
+            SceneManager.LoadScene("Main Menu");
         }
     }
 }

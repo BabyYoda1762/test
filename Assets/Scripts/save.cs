@@ -13,13 +13,11 @@ public class SettingsApplier : MonoBehaviour
 
     void Start()
     {
-        // Применяем сразу при старте сцены
         ApplySettings();
     }
 
     void Update()
     {
-        // Если по какой-то причине компоненты ещё не найдены (редко, но на всякий)
         if (lookScript == null || playerCamera == null)
         {
             FindComponents();
@@ -49,16 +47,9 @@ public class SettingsApplier : MonoBehaviour
         float sens = PlayerPrefs.GetFloat(SENS_KEY, defaultSensitivity);
         float fov = PlayerPrefs.GetFloat(FOV_KEY, defaultFOV);
 
-        if (lookScript != null)
-        {
-            lookScript.sensitivity = sens;
-            // Debug.Log($"Применена сенситивити: {sens}");
-        }
-
         if (playerCamera != null)
         {
             playerCamera.fieldOfView = fov;
-            // Debug.Log($"Применён FOV: {fov}");
         }
     }
 }

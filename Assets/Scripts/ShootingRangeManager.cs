@@ -23,7 +23,7 @@ public class ShootingRangeManager : MonoBehaviour
     [Header("Game Settings")]
     public float popDelayMax = 1.5f;
     public int maxTargets = 6;
-    public float targetStayTime = 2f; //это сколько мишень торчит сверху, потом сама уйдет
+    public float targetStayTime = 2f;
 
     private int score = 0;
     private int ammoLeft = 6;
@@ -35,7 +35,6 @@ public class ShootingRangeManager : MonoBehaviour
 
     void Awake()
     {
-        // Запоминаем где ревик лежал на столе, чтоб потом вернуть
         originalRevolverPos = tableRevolver.transform.position;
         originalRevolverRot = tableRevolver.transform.rotation;
     }
@@ -49,7 +48,6 @@ public class ShootingRangeManager : MonoBehaviour
             if (cam != null) playerCamera = cam.transform;
         }
 
-        // Кидаем ссылку на себя всем мишеням
         foreach (var target in targets)
         {
             if (target != null)
@@ -59,7 +57,6 @@ public class ShootingRangeManager : MonoBehaviour
         }
     }
 
-    // Запуск игры
     public void ActivateShooting()
     {
         if (IsActive) return;
@@ -70,64 +67,48 @@ public class ShootingRangeManager : MonoBehaviour
         scoreCanvas.gameObject.SetActive(true);
         UpdateUI();
 
-        // Опускаем мишени
         foreach (var target in targets)
         {
             if (target != null)
                 target.ResetTarget();
         }
 
-        // Запуск мишеней
         if (targetCycleCoroutine != null)
             StopCoroutine(targetCycleCoroutine);
 
         targetCycleCoroutine = StartCoroutine(TargetCycle());
     }
 
-    // Это темка которая поднимает мишени по очереди
     private IEnumerator TargetCycle()
     {
-        // Список доступных мишеней которые еще не выскакивали в этом цикле
+
         List<PopUpTarget> availableTargets = new List<PopUpTarget>(targets);
 
-        // Пока игра активна и есть патроны
         while (IsActive && ammoLeft > 0)
         {
-            // Ждем рандомное время перед следующей мишенью
             yield return new WaitForSeconds(Random.Range(0.5f, popDelayMax));
 
             if (!IsActive || ammoLeft <= 0) break;
-
-            // Если все мишени уже выскакивали - начинаем заново
             if (availableTargets.Count == 0)
             {
                 availableTargets = new List<PopUpTarget>(targets);
             }
 
-            // Тыкаем пальцем в небо и выбираем мишень
             int randomIndex = Random.Range(0, availableTargets.Count);
             PopUpTarget target = availableTargets[randomIndex];
 
             if (target != null)
             {
-                // Подъем мешений
                 target.PopUp();
-
-                // Ждем пока мишень постоит, если не сбили - сама уедет
                 yield return new WaitForSeconds(targetStayTime);
-
-                // Если еще не сбили - опускаем 
                 if (target.IsUp)
                 {
-                    target.Hit(false); // false - не засчитываем как попадание
+                    target.Hit(false); 
                 }
-
-                // Убираем из списка доступных, чтоб не повторялась сразу
                 availableTargets.RemoveAt(randomIndex);
             }
         }
 
-        // Кончились патроны = конец игры
         if (ammoLeft <= 0)
         {
             EndGame();
@@ -140,16 +121,13 @@ public class ShootingRangeManager : MonoBehaviour
         if (revolverPicked || !IsActive) return;
         revolverPicked = true;
 
-        // Вешаем ревик на руку
         tableRevolver.transform.SetParent(gunHand);
         tableRevolver.transform.localPosition = new Vector3(0.35f, -0.3f, 0.6f);
         tableRevolver.transform.localRotation = Quaternion.Euler(-10f, 0, 0);
 
-        // Выключаем коллайдеры чтоб не мешались
         foreach (Collider c in tableRevolver.GetComponentsInChildren<Collider>())
             c.enabled = false;
 
-        // Добавляем скрипт который стреляет
         RevolverShooter shooter = tableRevolver.GetComponent<RevolverShooter>();
         if (shooter == null) shooter = tableRevolver.AddComponent<RevolverShooter>();
 
@@ -167,24 +145,19 @@ public class ShootingRangeManager : MonoBehaviour
         shooter.FindBullets();
     }
 
-    // Эту тему вызывает мишень когда в нее попадают
     public void OnTargetHit()
     {
         if (!IsActive) return;
         score++;
         UpdateUI();
-        // Больше НЕ заканчиваем игру по количеству попаданий
-        // Игра закончится только когда кончатся патроны
     }
 
-    // Обновляем UI чтобы чел видел сколько попаданий и патронов
     private void UpdateUI()
     {
         scoreText.text = $"Hits: {score}/{maxTargets}";
         ammoText.text = $"Ammo: {ammoLeft}";
     }
 
-    // Тратятся патрон при выстреле
     public void UseAmmo()
     {
         if (!IsActive) return;
@@ -199,28 +172,23 @@ public class ShootingRangeManager : MonoBehaviour
         }
     }
 
-    // Возвращатся ревик на стол когда кончились патроны
     private void ReturnRevolverToTable()
     {
         if (!revolverPicked) return;
 
-        // Открепляем от руки и кладем на место
         tableRevolver.transform.SetParent(null);
         tableRevolver.transform.position = originalRevolverPos;
         tableRevolver.transform.rotation = originalRevolverRot;
 
-        // Удаляем скрипт стрельбы - больше не палим
         RevolverShooter shooter = tableRevolver.GetComponent<RevolverShooter>();
         if (shooter != null) Destroy(shooter);
 
-        // Включаем коллайдер обратно
         Collider col = tableRevolver.GetComponent<Collider>();
         if (col) col.enabled = true;
 
         revolverPicked = false;
     }
 
-    // Конец игры
     private void EndGame()
     {
         IsActive = false;
@@ -231,7 +199,6 @@ public class ShootingRangeManager : MonoBehaviour
             targetCycleCoroutine = null;
         }
 
-        // Опускаем все мишени
         foreach (var target in targets)
         {
             if (target != null)
@@ -241,7 +208,6 @@ public class ShootingRangeManager : MonoBehaviour
         ShowSpeechBubble();
     }
 
-    // Показываем баббл с результатами
     private void ShowSpeechBubble()
     {
         if (speechBubblePrefab == null || guySpeechPos == null) return;
@@ -264,7 +230,6 @@ public class ShootingRangeManager : MonoBehaviour
         StartCoroutine(FadeBubble(bubble, 7f));
     }
 
-    // Баббл плавно исчезает
     private IEnumerator FadeBubble(GameObject bubble, float duration)
     {
         CanvasGroup cg = bubble.GetComponent<CanvasGroup>();
@@ -279,7 +244,6 @@ public class ShootingRangeManager : MonoBehaviour
         Destroy(bubble);
     }
 
-    // Выключение канваса нужно сделать на кнопку, крч сам сделаешь не маленький
     public void DeactivateShooting()
     {
         IsActive = false;

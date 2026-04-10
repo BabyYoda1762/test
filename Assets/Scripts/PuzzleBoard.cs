@@ -41,7 +41,6 @@ public class PuzzleBoard : MonoBehaviour
 
         CacheTilesFromHierarchy();
 
-        // Пустая ячейка — правый нижний угол
         emptyCell = new Vector2Int(rows - 1, cols - 1);
         tiles[emptyCell.x, emptyCell.y] = null;
         cellCenters[emptyCell.x, emptyCell.y] = CalculateEmptyCellCenter();
@@ -56,7 +55,7 @@ public class PuzzleBoard : MonoBehaviour
 
     void Update()
     {
-        if (!IsActive) return; // Если пазл не активен — нет обновления
+        if (!IsActive) return;
         if (Input.GetKeyDown(KeyCode.Escape))
             DeactivatePuzzle();
     }
@@ -65,18 +64,12 @@ public class PuzzleBoard : MonoBehaviour
     {
         var children = puzzleRoot.GetComponentsInChildren<Tile>(true);
         List<Tile> activeTiles = new List<Tile>();
-        // Фильтруем только активные — выключенные не нужны
+
         foreach (var tile in children)
             if (tile.gameObject.activeInHierarchy)
             {
                 activeTiles.Add(tile);
             }
-        // Проверяем: должно быть РОВНО 8 тайлов, иначе гг
-        if (activeTiles.Count != 8)
-        {
-            Debug.LogError($"Должно быть 8 тайлов, найдено: {activeTiles.Count}");
-            return;
-        }
 
         int index = 0;
         for (int r = 0; r < rows; r++)
@@ -100,7 +93,6 @@ public class PuzzleBoard : MonoBehaviour
 
     private Vector3 CalculateEmptyCellCenter()
     {
-        // Тайл (2,1)
         if (tiles[2, 1] != null)
         {
             Vector3 left = tiles[2, 1].transform.position;
@@ -109,7 +101,6 @@ public class PuzzleBoard : MonoBehaviour
             return left + step;
         }
 
-        // жёсткая позиция (как говориться надёжно зафиксированый пациент в анестезии не нуждается)
         return new Vector3(1.7f, -0.34f, 0.329f);
     }
 
@@ -120,21 +111,18 @@ public class PuzzleBoard : MonoBehaviour
         int dr = Mathf.Abs(tile.row - emptyCell.x);
         int dc = Mathf.Abs(tile.col - emptyCell.y);
 
-        // Двигаем только если рядом с пустой ячейкой (по горизонтали или вертикали)
         if ((dr == 1 && dc == 0) || (dr == 0 && dc == 1))
             MoveTile(tile);
     }
 
     private void MoveTile(Tile tile)
     {
-        Vector3 target = cellCenters[emptyCell.x, emptyCell.y]; // Куда едем
-        Vector2Int oldPos = new Vector2Int(tile.row, tile.col); // Откуда
+        Vector3 target = cellCenters[emptyCell.x, emptyCell.y]; 
+        Vector2Int oldPos = new Vector2Int(tile.row, tile.col); 
 
-        //Движение в массиве
         tiles[emptyCell.x, emptyCell.y] = tile;
         tiles[oldPos.x, oldPos.y] = null;
 
-        // Обновляем коорды
         tile.row = emptyCell.x;
         tile.col = emptyCell.y;
         emptyCell = oldPos;
@@ -152,7 +140,7 @@ public class PuzzleBoard : MonoBehaviour
             tile.transform.position = Vector3.Lerp(start, target, t / moveDuration);
             yield return null;
         }
-        tile.transform.position = target; // На всякий случай — фикс
+        tile.transform.position = target;
     }
 
     public void ActivatePuzzle()
@@ -175,7 +163,6 @@ public class PuzzleBoard : MonoBehaviour
         IsActive = false;
     }
 
-    // Это чтобы пятнашки каждый раз при входе перемешивались
     public void Shuffle()
     {
         System.Random rng = new System.Random();
@@ -201,7 +188,7 @@ public class PuzzleBoard : MonoBehaviour
             Vector2Int chosen = possible[rng.Next(possible.Count)];
             Tile tile = tiles[chosen.x, chosen.y];
             if (tile != null)
-                MoveTileInstant(tile); // Двигаем мгновенно — без анимации
+                MoveTileInstant(tile); 
         }
     }
 

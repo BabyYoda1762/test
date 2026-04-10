@@ -26,7 +26,7 @@ public class ShootingRangeActivator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             manager.ActivateShooting();
-            manager.PickupRevolver();  // ÑÐÀÇÓ ןמהבטנאול נוגמכüגונ
+            manager.PickupRevolver();
         }
     }
 }
